@@ -1,0 +1,15 @@
+version: '3'
+
+services:
+  node:
+    build: 
+      context: ./kakeibo-node
+      dockerfile: Dockerfile
+    ports:
+      - '49160:8080'
+  react:
+    build: 
+      context: ./kakeibo-react
+      dockerfile: Dockerfile
+    ports:
+      - '49170:3000'
