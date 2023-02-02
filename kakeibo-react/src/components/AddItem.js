@@ -1,5 +1,20 @@
 import React, { useRef } from "react";
 import { v4 as uuidv4 } from "uuid";
+import Box from "@mui/material/Box";
+import Button from "@mui/material/Button";
+import Modal from "@mui/material/Modal";
+
+const style = {
+  position: "absolute",
+  top: "50%",
+  left: "50%",
+  transform: "translate(-50%, -50%)",
+  width: "25%",
+  height: "35%",
+  bgcolor: "background.paper",
+  boxShadow: 24,
+  p: 4,
+};
 
 const AddItem = (props) => {
   const setItems = props.setItems;
@@ -47,23 +62,46 @@ const AddItem = (props) => {
 
   if (showAddItemModal) {
     return (
-      <div id="overlay">
-        <div id="content">
-          日付: <input type="date" ref={refDate} />
-          カテゴリ:
-          <select ref={refCategory}>
-            <option value="食費">食費</option>
-            <option value="公共料金">公共料金</option>
-            <option value="娯楽">娯楽</option>
-          </select>
-          金額: <input type="text" pattern="^[0-9]+$" ref={refPrice} />
-          名前: <input type="text" ref={refName} />
-          <button onClick={handleAddItem}>登録</button>
+      <Modal
+        open={showAddItemModal}
+        onClose={handleCloseModal}
+        aria-labelledby="modal-modal-title"
+        aria-describedby="modal-modal-description"
+      >
+        <Box sx={style}>
           <p>
-            <button onClick={handleCloseModal}>close</button>
+            <input type="date" className="input" ref={refDate} />
           </p>
-        </div>
-      </div>
+          <p>
+            <select className="input" ref={refCategory}>
+              <option value="食費">食費</option>
+              <option value="公共料金">公共料金</option>
+              <option value="娯楽">娯楽</option>
+            </select>
+          </p>
+          <p>
+            <input
+              type="text"
+              className="input"
+              placeholder="内容を入力"
+              ref={refName}
+            />
+          </p>
+          <p>
+            <input
+              type="text"
+              className="input"
+              placeholder="金額を入力"
+              ref={refPrice}
+            />
+          </p>
+          <div className="addButton">
+            <Button variant="contained" onClick={handleAddItem}>
+              登録
+            </Button>
+          </div>
+        </Box>
+      </Modal>
     );
   }
 };

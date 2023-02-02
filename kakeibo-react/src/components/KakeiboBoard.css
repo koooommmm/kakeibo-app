@@ -11,7 +11,6 @@
   display: flex;
   align-items: center;
   justify-content: center;
-
 }
 
 #content{
@@ -19,4 +18,37 @@
   width:50%;
   padding: 1em;
   background:#fff;
+}
+
+.addButton{
+  text-align: right;
+  margin-right: 10%;
+}
+
+.item-list{
+  display: flex;
+  justify-content: center; /* 中央寄せ */
+}
+.item-list .item{
+  box-sizing: border-box;
+  padding: 40px 80px;
+}
+
+.balance{
+  color: #747F7F;
+  text-align: center;
+}
+
+.income{
+  color: #00CCC0;
+  text-align: center;
+}
+
+.expence{
+  color: #FF4858;
+  text-align: center;
+}
+
+.input{
+  padding: 8px;
 }
