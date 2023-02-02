@@ -3,7 +3,9 @@ import React from "react";
 const ItemList = (props) => {
   const kind = props.kind;
   const items = props.items;
-  const total = props.total;
+  const total = items.reduce((sum, element) => {
+    return sum + element.price;
+  }, 0);
 
   return (
     <>
