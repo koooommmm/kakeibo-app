@@ -5,11 +5,15 @@ services:
     build: 
       context: ./kakeibo-node
       dockerfile: Dockerfile
+    volumes:
+      - ./kakeibo-node:/usr/src/app
     ports:
       - '49160:8080'
   react:
     build: 
       context: ./kakeibo-react
       dockerfile: Dockerfile
+    volumes:
+      - ./kakeibo-react:/usr/src/app
     ports:
       - '49170:3000'
