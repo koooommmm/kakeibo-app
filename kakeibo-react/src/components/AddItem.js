@@ -1,25 +1,43 @@
-import React, { useRef } from "react";
+import React, { useRef, useState } from "react";
 import { v4 as uuidv4 } from "uuid";
 import Box from "@mui/material/Box";
 import Button from "@mui/material/Button";
 import Modal from "@mui/material/Modal";
+import { width } from "@mui/system";
 
 const style = {
   position: "absolute",
   top: "50%",
   left: "50%",
   transform: "translate(-50%, -50%)",
-  width: "25%",
-  height: "35%",
+  width: "30%",
+  minWidth: "fit-content",
+  height: "50%",
+  minHeight: "fit-content",
   bgcolor: "background.paper",
   boxShadow: 24,
-  p: 4,
+  overflow: "hidden",
 };
 
+const income_options = ["給与", "一時所得", "その他"];
+const expense_options = [
+  "食費",
+  "日用品",
+  "趣味・娯楽",
+  "交通費",
+  "衣類・美容",
+  "健康・医療",
+  "光熱費",
+  "通信費",
+  "その他",
+];
+
 const AddItem = (props) => {
-  const setItems = props.setItems;
   const showAddItemModal = props.showAddItemModal;
   const setShowAddItemModal = props.setShowAddItemModal;
+
+  const [tab, setTab] = useState("income");
+  const [options, setOptions] = useState(income_options);
 
   const refDate = useRef();
   const refCategory = useRef();
@@ -28,6 +46,16 @@ const AddItem = (props) => {
 
   const handleCloseModal = () => {
     setShowAddItemModal(false);
+  };
+
+  const handleChangeTab = (e) => {
+    if (e.target.value === "income") {
+      setTab("income");
+      setOptions(income_options);
+    } else {
+      setTab("expense");
+      setOptions(expense_options);
+    }
   };
 
   const handleAddItem = () => {
@@ -39,18 +67,33 @@ const AddItem = (props) => {
     if ((date === "") | (category === "") | (price === "") | (name === ""))
       return;
 
-    setItems((prevItems) => {
-      return [
-        ...prevItems,
-        {
-          id: uuidv4(),
-          date: date,
-          category: category,
-          price: parseInt(price),
-          name: name,
-        },
-      ];
-    });
+    if (tab === "income") {
+      props.setIncomes((prevItems) => {
+        return [
+          ...prevItems,
+          {
+            id: uuidv4(),
+            date: date,
+            category: category,
+            price: parseInt(price),
+            name: name,
+          },
+        ];
+      });
+    } else {
+      props.setExpenses((prevItems) => {
+        return [
+          ...prevItems,
+          {
+            id: uuidv4(),
+            date: date,
+            category: category,
+            price: parseInt(price),
+            name: name,
+          },
+        ];
+      });
+    }
 
     refDate.current.value = null;
     refCategory.current.value = null;
@@ -69,34 +112,57 @@ const AddItem = (props) => {
         aria-describedby="modal-modal-description"
       >
         <Box sx={style}>
-          <p>
+          <div className="segment" onChange={handleChangeTab}>
+            <input
+              type="radio"
+              name="tab"
+              id="income"
+              value="income"
+              defaultChecked
+            />
+            <label className="segment-button" htmlFor="income">
+              収入
+            </label>
+
+            <input type="radio" name="tab" id="expense" value="expense" />
+            <label className="segment-button" htmlFor="expense">
+              支出
+            </label>
+          </div>
+
+          <div className="input-content">
             <input type="date" className="input" ref={refDate} />
-          </p>
-          <p>
+          </div>
+          <div className="input-content">
             <select className="input" ref={refCategory}>
-              <option value="食費">食費</option>
-              <option value="公共料金">公共料金</option>
-              <option value="娯楽">娯楽</option>
+              <option value="" selected>
+                選択してください
+              </option>
+              {options.map((option) => (
+                <option key={option} value={option}>
+                  {option}
+                </option>
+              ))}
             </select>
-          </p>
-          <p>
+          </div>
+          <div className="input-content">
             <input
               type="text"
               className="input"
               placeholder="内容を入力"
               ref={refName}
             />
-          </p>
-          <p>
+          </div>
+          <div className="input-content">
             <input
               type="text"
               className="input"
               placeholder="金額を入力"
               ref={refPrice}
             />
-          </p>
+          </div>
           <div className="addButton">
-            <Button variant="contained" onClick={handleAddItem}>
+            <Button color="inherit" variant="contained" onClick={handleAddItem}>
               登録
             </Button>
           </div>
