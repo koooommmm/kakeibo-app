@@ -1,7 +1,9 @@
+import React from "react";
 import "./App.css";
+import KakeiboBoard from "./components/KakeiboBoard";
 
-function App() {
-  return <div className="App">test</div>;
-}
+const App = () => {
+  return <KakeiboBoard />;
+};
 
 export default App;
