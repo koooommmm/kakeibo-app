@@ -33,7 +33,7 @@ const ItemList = (props) => {
                   sx={{ "&:last-child td, &:last-child th": { border: 0 } }}
                 >
                   <TableCell component="th" scope="row">
-                    {item.date}
+                    {item.date.split("T")[0]}
                   </TableCell>
                   <TableCell align="right">{item.name}</TableCell>
                   <TableCell align="right">{item.price}</TableCell>

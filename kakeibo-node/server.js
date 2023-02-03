@@ -18,10 +18,24 @@ const HOST = "0.0.0.0";
 // App
 const app = express();
 
-app.get("/items", (req, res) => {
-  connection.execute("select * from item;", (err, results, fields) => {
-    res.send(results);
-  });
+app.get("/items/income", (req, res) => {
+  connection.execute(
+    "select id, category, date, name, price from items where kind='income';",
+    (err, results, fields) => {
+      console.log(results);
+      res.send(results);
+    }
+  );
+});
+
+app.get("/items/expense", (req, res) => {
+  connection.execute(
+    "select id, category, date, name, price from items where kind='expense';",
+    (err, results, fields) => {
+      console.log(results);
+      res.send(results);
+    }
+  );
 });
 
 app.listen(PORT, HOST, () => {

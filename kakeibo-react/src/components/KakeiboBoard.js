@@ -1,7 +1,7 @@
-import React from "react";
+import React, { useEffect, useState } from "react";
+import axios from "axios";
 import ItemList from "./ItemList";
 import AddItem from "./AddItem";
-import { useState } from "react";
 import "./KakeiboBoard.css";
 import Button from "@mui/material/Button";
 
@@ -24,6 +24,18 @@ const KakeiboBoard = () => {
   const handleClickAddButton = () => {
     setShowAddItemModal(true);
   };
+
+  useEffect(() => {
+    // 収入の取得
+    axios.get("/items/income").then((response) => {
+      setIncomes(response.data);
+    });
+
+    // 支出の取得
+    axios.get("/items/expense").then((response) => {
+      setExpenses(response.data);
+    });
+  }, []);
 
   return (
     <>
