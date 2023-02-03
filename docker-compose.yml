@@ -11,7 +11,8 @@ services:
       MYSQL_DATABASE: ${DB_NAME}
       MYSQL_USER: ${DB_USER}
       MYSQL_PASSWORD: ${DB_PASS}
-      TZ: ${TZ}
+      TZ: Asia/Tokyo
+      LC_ALL: ja_JP.UTF-8
     ports:
         - ${DB_PORT}:3306
     volumes:
