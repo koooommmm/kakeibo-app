@@ -1,6 +1,22 @@
 version: '3'
 
 services:
+  db:
+    build:
+      context: ./kakeibo-db
+      dockerfile: Dockerfile
+    restart: always
+    environment:
+      MYSQL_ROOT_PASSWORD: ${ROOT_PASS}
+      MYSQL_DATABASE: ${DB_NAME}
+      MYSQL_USER: ${DB_USER}
+      MYSQL_PASSWORD: ${DB_PASS}
+      TZ: ${TZ}
+    ports:
+        - ${DB_PORT}:3306
+    volumes:
+        - db-store:/var/lib/mysql
+
   node:
     build: 
       context: ./kakeibo-node
@@ -9,6 +25,9 @@ services:
       - ./kakeibo-node:/usr/src/app
     ports:
       - '49160:8080'
+    depends_on:
+      - db
+
   react:
     build: 
       context: ./kakeibo-react
@@ -17,3 +36,8 @@ services:
       - ./kakeibo-react:/usr/src/app
     ports:
       - '49170:3000'
+    depends_on:
+      - node
+
+volumes:
+  db-store:
