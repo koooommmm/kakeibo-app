@@ -7,19 +7,20 @@ import Button from "@mui/material/Button";
 
 const KakeiboBoard = () => {
   const [incomes, setIncomes] = useState([]);
-  const [expences, setExpenses] = useState([]);
+  const [expenses, setExpenses] = useState([]);
   const [showAddItemModal, setShowAddItemModal] = useState(false);
 
   const income_total = incomes.reduce((sum, element) => {
     return sum + element.price;
   }, 0);
 
-  const expence_total = expences.reduce((sum, element) => {
+  const expense_total = expenses.reduce((sum, element) => {
     return sum + element.price;
   }, 0);
 
-  const balance = income_total - expence_total;
+  const balance = income_total - expense_total;
 
+  // 登録ボタンが押下されたらモーダルを開くために状態を更新する
   const handleClickAddButton = () => {
     setShowAddItemModal(true);
   };
@@ -29,7 +30,7 @@ const KakeiboBoard = () => {
       <h1 className="balance">¥{balance}</h1>
       <div className="item-list">
         <ItemList kind="income" items={incomes} total={income_total} />
-        <ItemList kind="expence" items={expences} total={expence_total} />
+        <ItemList kind="expense" items={expenses} total={expense_total} />
       </div>
       <div className="addButton">
         <Button
