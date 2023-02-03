@@ -36,6 +36,9 @@ services:
       - ./kakeibo-react:/usr/src/app
     ports:
       - '49170:3000'
+    environment:
+      - CHOKIDAR_USEPOLLING=true
+      - WDS_SOCKET_PORT=0
     depends_on:
       - node
 
