@@ -135,9 +135,7 @@ const AddItem = (props) => {
           </div>
           <div className="input-content">
             <select className="input" ref={refCategory}>
-              <option value="" selected>
-                選択してください
-              </option>
+              <option defaultValue="">選択してください</option>
               {options.map((option) => (
                 <option key={option} value={option}>
                   {option}
