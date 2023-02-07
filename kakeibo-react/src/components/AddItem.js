@@ -45,6 +45,8 @@ const AddItem = (props) => {
   const refName = useRef();
 
   const handleCloseModal = () => {
+    setTab("income");
+    setOptions(income_options);
     setShowAddItemModal(false);
   };
 
