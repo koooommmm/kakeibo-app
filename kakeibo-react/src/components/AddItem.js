@@ -1,9 +1,9 @@
 import React, { useRef, useState } from "react";
+import axios from "axios";
 import { v4 as uuidv4 } from "uuid";
 import Box from "@mui/material/Box";
 import Button from "@mui/material/Button";
 import Modal from "@mui/material/Modal";
-import { width } from "@mui/system";
 
 const style = {
   position: "absolute",
@@ -101,6 +101,15 @@ const AddItem = (props) => {
     refName.current.value = null;
 
     setShowAddItemModal(false);
+    axios
+      .post("/items", {
+        kind: tab,
+        category: category,
+        date: date,
+        name: name,
+        price: price,
+      })
+      .then((response) => {});
   };
 
   if (showAddItemModal) {
