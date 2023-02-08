@@ -66,7 +66,6 @@ const AddItem = (props) => {
     event.preventDefault();
     const data = new FormData(event.currentTarget);
 
-    setShowAddItemModal(false);
     await axios.post("/items", {
       kind: data.get("kind"),
       category: data.get("category"),

@@ -28,14 +28,14 @@ const main = async () => {
   try {
     app.get("/items/income", async (req, res) => {
       const [results, fields] = await connection.execute(
-        "select id, category, date, name, price from items where kind='income';"
+        "select id, kind, category, date, name, price from items where kind='income';"
       );
       res.send(results);
     });
 
     app.get("/items/expense", async (req, res) => {
       const [results, fields] = await connection.execute(
-        "select id, category, date, name, price from items where kind='expense';"
+        "select id, kind, category, date, name, price from items where kind='expense';"
       );
       res.send(results);
     });
@@ -58,6 +58,20 @@ const main = async () => {
       const [results, fields] = await connection.execute(
         "delete from items where id = ?",
         [req.body.id]
+      );
+      res.send();
+    });
+
+    app.put("/items", async (req, res) => {
+      const [results, fields] = await connection.execute(
+        "update items set category=?, date=?, name=?, price=? where id = ?",
+        [
+          req.body.category,
+          req.body.date,
+          req.body.name,
+          req.body.price,
+          req.body.id,
+        ]
       );
       res.send();
     });

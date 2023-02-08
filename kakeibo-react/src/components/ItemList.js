@@ -1,4 +1,5 @@
 import React from "react";
+import { useState } from "react";
 import Table from "@mui/material/Table";
 import TableBody from "@mui/material/TableBody";
 import TableCell from "@mui/material/TableCell";
@@ -8,13 +9,22 @@ import TableRow from "@mui/material/TableRow";
 import Paper from "@mui/material/Paper";
 import DeleteIcon from "@mui/icons-material/Delete";
 import IconButton from "@mui/material/IconButton";
+import EditIcon from "@mui/icons-material/Edit";
 import axios from "axios";
+import EditItem from "./EditItem";
 
 const ItemList = (props) => {
   const kind = props.kind;
   const items = props.items;
   const total = props.total;
   const updateItems = props.updateItems;
+  const [showEditItemModal, setShowEditItemModal] = useState(false);
+  const [editItem, setEditItem] = useState();
+
+  const handleEditItem = (item) => {
+    setEditItem(item);
+    setShowEditItemModal(true);
+  };
 
   const handleDeleteItem = async (id) => {
     await axios.delete("/items", { data: { id: id } });
@@ -50,6 +60,13 @@ const ItemList = (props) => {
                   <TableCell>
                     <IconButton
                       onClick={() => {
+                        handleEditItem(item);
+                      }}
+                    >
+                      <EditIcon />
+                    </IconButton>
+                    <IconButton
+                      onClick={() => {
                         handleDeleteItem(item.id);
                       }}
                     >
@@ -62,6 +79,12 @@ const ItemList = (props) => {
           </Table>
         </TableContainer>
       </div>
+      <EditItem
+        updateItems={updateItems}
+        showEditItemModal={showEditItemModal}
+        setShowEditItemModal={setShowEditItemModal}
+        item={editItem}
+      />
     </>
   );
 };
