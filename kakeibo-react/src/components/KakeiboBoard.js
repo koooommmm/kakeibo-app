@@ -9,6 +9,7 @@ const KakeiboBoard = () => {
   const [incomes, setIncomes] = useState([]);
   const [expenses, setExpenses] = useState([]);
   const [showAddItemModal, setShowAddItemModal] = useState(false);
+  const [isRendered, setIsRendered] = useState(false);
 
   const income_total = incomes.reduce((sum, element) => {
     return sum + element.price;
@@ -29,19 +30,18 @@ const KakeiboBoard = () => {
     setShowAddItemModal(true);
   };
 
-  const updateItems = () => {
-    // 収入の取得
-    axios.get("/items/income").then((response) => {
-      setIncomes(response.data);
-    });
+  const updateItems = async () => {
+    // 収入・支出の取得
+    const response_income = await axios.get("/items/income");
+    const response_expense = await axios.get("/items/expense");
+    setIncomes(response_income.data);
+    setExpenses(response_expense.data);
 
-    // 支出の取得
-    axios.get("/items/expense").then((response) => {
-      setExpenses(response.data);
-    });
+    // 取得完了後に画面に反映する
+    setIsRendered(true);
   };
 
-  return (
+  return isRendered ? (
     <>
       <h1 className="balance">¥{balance}</h1>
       <div className="item-list">
@@ -63,6 +63,8 @@ const KakeiboBoard = () => {
         setShowAddItemModal={setShowAddItemModal}
       />
     </>
+  ) : (
+    <></>
   );
 };
 
