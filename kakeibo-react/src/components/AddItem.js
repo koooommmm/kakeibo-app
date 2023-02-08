@@ -95,7 +95,12 @@ const AddItem = (props) => {
             </div>
 
             <div className="input-content">
-              <input type="date" className="input" name="date" />
+              <input
+                type="date"
+                className="input"
+                name="date"
+                defaultValue={new Date().toISOString().split("T")[0]}
+              />
             </div>
 
             <div className="input-content">
