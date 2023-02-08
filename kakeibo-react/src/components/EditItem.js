@@ -11,7 +11,7 @@ const style = {
   transform: "translate(-50%, -50%)",
   width: "30%",
   minWidth: "fit-content",
-  height: "55%",
+  height: "45%",
   minHeight: "fit-content",
   bgcolor: "background.paper",
   boxShadow: 24,
