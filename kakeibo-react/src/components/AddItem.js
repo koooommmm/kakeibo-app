@@ -1,4 +1,4 @@
-import React, { useEffect, useState } from "react";
+import React, { useState } from "react";
 import axios from "axios";
 import Box from "@mui/material/Box";
 import Button from "@mui/material/Button";
@@ -18,18 +18,21 @@ const style = {
   overflow: "hidden",
 };
 
-const income_options = ["給与", "一時所得", "その他"];
-const expense_options = [
-  "食費",
-  "日用品",
-  "趣味・娯楽",
-  "交通費",
-  "衣類・美容",
-  "健康・医療",
-  "光熱費",
-  "通信費",
-  "その他",
-];
+const options = {
+  income: ["選択してください", "給与", "一時所得", "その他"],
+  expense: [
+    "選択してください",
+    "食費",
+    "日用品",
+    "趣味・娯楽",
+    "交通費",
+    "衣類・美容",
+    "健康・医療",
+    "光熱費",
+    "通信費",
+    "その他",
+  ],
+};
 
 const AddItem = (props) => {
   const updateItems = props.updateItems;
@@ -37,30 +40,15 @@ const AddItem = (props) => {
   const setShowAddItemModal = props.setShowAddItemModal;
 
   const [kind, setKind] = useState("income");
-  const [options, setOptions] = useState(income_options);
 
   const handleCloseModal = () => {
     setKind("income");
-    setOptions(income_options);
     setShowAddItemModal(false);
   };
 
   const handleChangeTab = (element) => {
     setKind(element.target.value);
   };
-
-  useEffect(() => {
-    switch (kind) {
-      case "income":
-        setOptions(income_options);
-        break;
-      case "expense":
-        setOptions(expense_options);
-        break;
-      default:
-        break;
-    }
-  }, [kind]);
 
   const handleSubmit = async (event) => {
     event.preventDefault();
@@ -109,16 +97,17 @@ const AddItem = (props) => {
             <div className="input-content">
               <input type="date" className="input" name="date" />
             </div>
+
             <div className="input-content">
               <select className="input" name="category">
-                <option defaultValue="">選択してください</option>
-                {options.map((option) => (
+                {options[kind].map((option) => (
                   <option key={option} value={option}>
                     {option}
                   </option>
                 ))}
               </select>
             </div>
+
             <div className="input-content">
               <input
                 type="text"
@@ -127,6 +116,7 @@ const AddItem = (props) => {
                 name="name"
               />
             </div>
+
             <div className="input-content">
               <input
                 type="text"
@@ -135,6 +125,7 @@ const AddItem = (props) => {
                 name="price"
               />
             </div>
+
             <div className="addButton">
               <Button color="inherit" variant="contained" type="submit">
                 登録

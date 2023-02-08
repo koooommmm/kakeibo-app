@@ -77,6 +77,7 @@ const EditItem = (props) => {
                 defaultValue={item.date.split("T")[0]}
               />
             </div>
+
             <div className="input-content">
               <select
                 defaultValue={item.category}
@@ -90,6 +91,7 @@ const EditItem = (props) => {
                 ))}
               </select>
             </div>
+
             <div className="input-content">
               <input
                 type="text"
@@ -99,6 +101,7 @@ const EditItem = (props) => {
                 defaultValue={item.name}
               />
             </div>
+
             <div className="input-content">
               <input
                 type="text"
@@ -108,6 +111,7 @@ const EditItem = (props) => {
                 defaultValue={item.price}
               />
             </div>
+
             <div className="addButton">
               <Button color="inherit" variant="contained" type="submit">
                 更新
