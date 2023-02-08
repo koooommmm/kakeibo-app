@@ -20,12 +20,16 @@ const KakeiboBoard = () => {
 
   const balance = income_total - expense_total;
 
+  useEffect(() => {
+    updateItems();
+  }, []);
+
   // 登録ボタンが押下されたらモーダルを開くために状態を更新する
   const handleClickAddButton = () => {
     setShowAddItemModal(true);
   };
 
-  useEffect(() => {
+  const updateItems = () => {
     // 収入の取得
     axios.get("/items/income").then((response) => {
       setIncomes(response.data);
@@ -35,7 +39,7 @@ const KakeiboBoard = () => {
     axios.get("/items/expense").then((response) => {
       setExpenses(response.data);
     });
-  }, []);
+  };
 
   return (
     <>
@@ -54,8 +58,7 @@ const KakeiboBoard = () => {
         </Button>
       </div>
       <AddItem
-        setIncomes={setIncomes}
-        setExpenses={setExpenses}
+        updateItems={updateItems}
         showAddItemModal={showAddItemModal}
         setShowAddItemModal={setShowAddItemModal}
       />

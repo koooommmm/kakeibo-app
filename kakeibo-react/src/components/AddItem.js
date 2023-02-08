@@ -1,6 +1,5 @@
-import React, { useRef, useState } from "react";
+import React, { useEffect, useState } from "react";
 import axios from "axios";
-import { v4 as uuidv4 } from "uuid";
 import Box from "@mui/material/Box";
 import Button from "@mui/material/Button";
 import Modal from "@mui/material/Modal";
@@ -33,85 +32,51 @@ const expense_options = [
 ];
 
 const AddItem = (props) => {
+  const updateItems = props.updateItems;
   const showAddItemModal = props.showAddItemModal;
   const setShowAddItemModal = props.setShowAddItemModal;
 
-  const [tab, setTab] = useState("income");
+  const [kind, setKind] = useState("income");
   const [options, setOptions] = useState(income_options);
 
-  const refDate = useRef();
-  const refCategory = useRef();
-  const refPrice = useRef();
-  const refName = useRef();
-
   const handleCloseModal = () => {
-    setTab("income");
+    setKind("income");
     setOptions(income_options);
     setShowAddItemModal(false);
   };
 
-  const handleChangeTab = (e) => {
-    if (e.target.value === "income") {
-      setTab("income");
-      setOptions(income_options);
-    } else {
-      setTab("expense");
-      setOptions(expense_options);
-    }
+  const handleChangeTab = (element) => {
+    setKind(element.target.value);
   };
 
-  const handleAddItem = () => {
-    const date = refDate.current.value;
-    const category = refCategory.current.value;
-    const price = refPrice.current.value;
-    const name = refName.current.value;
-
-    if ((date === "") | (category === "") | (price === "") | (name === ""))
-      return;
-
-    if (tab === "income") {
-      props.setIncomes((prevItems) => {
-        return [
-          ...prevItems,
-          {
-            id: uuidv4(),
-            date: date,
-            category: category,
-            price: parseInt(price),
-            name: name,
-          },
-        ];
-      });
-    } else {
-      props.setExpenses((prevItems) => {
-        return [
-          ...prevItems,
-          {
-            id: uuidv4(),
-            date: date,
-            category: category,
-            price: parseInt(price),
-            name: name,
-          },
-        ];
-      });
+  useEffect(() => {
+    switch (kind) {
+      case "income":
+        setOptions(income_options);
+        break;
+      case "expense":
+        setOptions(expense_options);
+        break;
+      default:
+        break;
     }
+  }, [kind]);
 
-    refDate.current.value = null;
-    refCategory.current.value = null;
-    refPrice.current.value = null;
-    refName.current.value = null;
+  const handleSubmit = (event) => {
+    event.preventDefault();
+    const data = new FormData(event.currentTarget);
 
     setShowAddItemModal(false);
-    axios
-      .post("/items", {
-        kind: tab,
-        category: category,
-        date: date,
-        name: name,
-        price: price,
-      })
-      .then((response) => {});
+    axios.post("/items", {
+      kind: data.get("kind"),
+      category: data.get("category"),
+      date: data.get("date"),
+      name: data.get("name"),
+      price: data.get("price"),
+    });
+
+    setShowAddItemModal(false);
+    updateItems();
   };
 
   if (showAddItemModal) {
@@ -123,58 +88,60 @@ const AddItem = (props) => {
         aria-describedby="modal-modal-description"
       >
         <Box sx={style}>
-          <div className="segment" onChange={handleChangeTab}>
-            <input
-              type="radio"
-              name="tab"
-              id="income"
-              value="income"
-              defaultChecked
-            />
-            <label className="segment-button" htmlFor="income">
-              収入
-            </label>
+          <form onSubmit={(event) => handleSubmit(event)}>
+            <div className="segment" onChange={handleChangeTab}>
+              <input
+                type="radio"
+                name="kind"
+                id="income"
+                value="income"
+                defaultChecked
+              />
+              <label className="segment-button" htmlFor="income">
+                収入
+              </label>
 
-            <input type="radio" name="tab" id="expense" value="expense" />
-            <label className="segment-button" htmlFor="expense">
-              支出
-            </label>
-          </div>
+              <input type="radio" name="kind" id="expense" value="expense" />
+              <label className="segment-button" htmlFor="expense">
+                支出
+              </label>
+            </div>
 
-          <div className="input-content">
-            <input type="date" className="input" ref={refDate} />
-          </div>
-          <div className="input-content">
-            <select className="input" ref={refCategory}>
-              <option defaultValue="">選択してください</option>
-              {options.map((option) => (
-                <option key={option} value={option}>
-                  {option}
-                </option>
-              ))}
-            </select>
-          </div>
-          <div className="input-content">
-            <input
-              type="text"
-              className="input"
-              placeholder="内容を入力"
-              ref={refName}
-            />
-          </div>
-          <div className="input-content">
-            <input
-              type="text"
-              className="input"
-              placeholder="金額を入力"
-              ref={refPrice}
-            />
-          </div>
-          <div className="addButton">
-            <Button color="inherit" variant="contained" onClick={handleAddItem}>
-              登録
-            </Button>
-          </div>
+            <div className="input-content">
+              <input type="date" className="input" name="date" />
+            </div>
+            <div className="input-content">
+              <select className="input" name="category">
+                <option defaultValue="">選択してください</option>
+                {options.map((option) => (
+                  <option key={option} value={option}>
+                    {option}
+                  </option>
+                ))}
+              </select>
+            </div>
+            <div className="input-content">
+              <input
+                type="text"
+                className="input"
+                placeholder="内容を入力"
+                name="name"
+              />
+            </div>
+            <div className="input-content">
+              <input
+                type="text"
+                className="input"
+                placeholder="金額を入力"
+                name="price"
+              />
+            </div>
+            <div className="addButton">
+              <Button color="inherit" variant="contained" type="submit">
+                登録
+              </Button>
+            </div>
+          </form>
         </Box>
       </Modal>
     );

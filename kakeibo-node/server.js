@@ -28,20 +28,20 @@ const main = async () => {
   try {
     app.get("/items/income", async (req, res) => {
       const [results, fields] = await connection.execute(
-        "select id, category, date, name, price from items where kind='income';"
+        "select id, category, date, name, price from items where kind='income' and delete_flag=0;"
       );
       res.send(results);
     });
 
     app.get("/items/expense", async (req, res) => {
       const [results, fields] = await connection.execute(
-        "select id, category, date, name, price from items where kind='expense';"
+        "select id, category, date, name, price from items where kind='expense' and delete_flag=0;"
       );
       res.send(results);
     });
 
     app.post("/items", async (req, res) => {
-      await connection.execute(
+      const [results, fields] = await connection.execute(
         "insert into items (kind, category, date, name, price) values (?,?,?,?,?)",
         [
           req.body.kind,
@@ -51,7 +51,7 @@ const main = async () => {
           req.body.price,
         ]
       );
-      res.send();
+      res.send(results);
     });
   } catch (error) {
     console.error(error);
