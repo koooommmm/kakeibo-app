@@ -5,7 +5,6 @@ CREATE TABLE items (
     category              VARCHAR(256),
     name                  VARCHAR(256),
     price                 INTEGER NOT NULL,
-    delete_flag           BOOLEAN NOT NULL DEFAULT FALSE,
     created_at            DATETIME NOT NULL DEFAULT CURRENT_TIMESTAMP,
     updated_at            DATETIME NOT NULL DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP
 );

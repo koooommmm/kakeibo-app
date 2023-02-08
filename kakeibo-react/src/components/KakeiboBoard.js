@@ -45,8 +45,18 @@ const KakeiboBoard = () => {
     <>
       <h1 className="balance">¥{balance}</h1>
       <div className="item-list">
-        <ItemList kind="income" items={incomes} total={income_total} />
-        <ItemList kind="expense" items={expenses} total={expense_total} />
+        <ItemList
+          kind="income"
+          items={incomes}
+          total={income_total}
+          updateItems={updateItems}
+        />
+        <ItemList
+          kind="expense"
+          items={expenses}
+          total={expense_total}
+          updateItems={updateItems}
+        />
       </div>
       <div className="addButton">
         <Button

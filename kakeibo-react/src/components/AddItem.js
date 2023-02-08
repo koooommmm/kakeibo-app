@@ -62,12 +62,12 @@ const AddItem = (props) => {
     }
   }, [kind]);
 
-  const handleSubmit = (event) => {
+  const handleSubmit = async (event) => {
     event.preventDefault();
     const data = new FormData(event.currentTarget);
 
     setShowAddItemModal(false);
-    axios.post("/items", {
+    await axios.post("/items", {
       kind: data.get("kind"),
       category: data.get("category"),
       date: data.get("date"),

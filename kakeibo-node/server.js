@@ -28,14 +28,14 @@ const main = async () => {
   try {
     app.get("/items/income", async (req, res) => {
       const [results, fields] = await connection.execute(
-        "select id, category, date, name, price from items where kind='income' and delete_flag=0;"
+        "select id, category, date, name, price from items where kind='income';"
       );
       res.send(results);
     });
 
     app.get("/items/expense", async (req, res) => {
       const [results, fields] = await connection.execute(
-        "select id, category, date, name, price from items where kind='expense' and delete_flag=0;"
+        "select id, category, date, name, price from items where kind='expense';"
       );
       res.send(results);
     });
@@ -52,6 +52,14 @@ const main = async () => {
         ]
       );
       res.send(results);
+    });
+
+    app.delete("/items", async (req, res) => {
+      const [results, fields] = await connection.execute(
+        "delete from items where id = ?",
+        [req.body.id]
+      );
+      res.send();
     });
   } catch (error) {
     console.error(error);

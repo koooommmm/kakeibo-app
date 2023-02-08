@@ -6,11 +6,20 @@ import TableContainer from "@mui/material/TableContainer";
 import TableHead from "@mui/material/TableHead";
 import TableRow from "@mui/material/TableRow";
 import Paper from "@mui/material/Paper";
+import DeleteIcon from "@mui/icons-material/Delete";
+import IconButton from "@mui/material/IconButton";
+import axios from "axios";
 
 const ItemList = (props) => {
   const kind = props.kind;
   const items = props.items;
   const total = props.total;
+  const updateItems = props.updateItems;
+
+  const handleDeleteItem = async (id) => {
+    await axios.delete("/items", { data: { id: id } });
+    updateItems();
+  };
 
   return (
     <>
@@ -24,6 +33,7 @@ const ItemList = (props) => {
                 <TableCell>Date</TableCell>
                 <TableCell align="right">Name</TableCell>
                 <TableCell align="right">Price</TableCell>
+                <TableCell></TableCell>
               </TableRow>
             </TableHead>
             <TableBody>
@@ -37,6 +47,15 @@ const ItemList = (props) => {
                   </TableCell>
                   <TableCell align="right">{item.name}</TableCell>
                   <TableCell align="right">{item.price}</TableCell>
+                  <TableCell>
+                    <IconButton
+                      onClick={() => {
+                        handleDeleteItem(item.id);
+                      }}
+                    >
+                      <DeleteIcon />
+                    </IconButton>
+                  </TableCell>
                 </TableRow>
               ))}
             </TableBody>
