@@ -2,21 +2,26 @@ version: '3'
 
 services:
   db:
-    build:
-      context: ./kakeibo-db
-      dockerfile: Dockerfile
-    restart: always
+    image: mysql:8.0.32
+    container_name: mysql
     environment:
       MYSQL_ROOT_PASSWORD: ${ROOT_PASS}
       MYSQL_DATABASE: ${DB_NAME}
       MYSQL_USER: ${DB_USER}
       MYSQL_PASSWORD: ${DB_PASS}
-      TZ: Asia/Tokyo
-      LC_ALL: ja_JP.UTF-8
-    ports:
-        - ${DB_PORT}:3306
+      TZ: 'Asia/Tokyo'
+    command: mysqld --character-set-server=utf8mb4 --collation-server=utf8mb4_unicode_ci
+    healthcheck:
+      test: mysqladmin ping -h localhost
+      interval: 5s
+      timeout: 5s
+      retries: 5
     volumes:
-        - db-store:/var/lib/mysql
+    - db-store:/var/lib/mysql
+    - ./kakeibo-db/my.cnf:/etc/mysql/conf.d/my.cnf
+    - ./kakeibo-db/initdb.d:/docker-entrypoint-initdb.d
+    ports:
+    - 3306:3306
 
   node:
     build: 
@@ -24,13 +29,15 @@ services:
       dockerfile: Dockerfile
     volumes:
       - ./kakeibo-node:/usr/src/app
+      - node-modules_backend:/usr/src/app/node_modules
     ports:
       - '49160:8080'
     environment:
       - CHOKIDAR_USEPOLLING=true
     command: npx nodemon
     depends_on:
-      - db
+      db:
+        condition: service_healthy
 
   react:
     build: 
@@ -38,6 +45,7 @@ services:
       dockerfile: Dockerfile
     volumes:
       - ./kakeibo-react:/usr/src/app
+      - node-modules_frontend:/usr/src/app/node_modules
     ports:
       - '49170:3000'
     environment:
@@ -48,3 +56,5 @@ services:
 
 volumes:
   db-store:
+  node-modules_backend:
+  node-modules_frontend:
